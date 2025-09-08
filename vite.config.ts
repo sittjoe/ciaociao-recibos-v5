@@ -5,6 +5,7 @@ import path from 'path';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/ciaociao-recibos-v5/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -20,5 +21,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
+    assetsDir: 'assets',
   },
 });
