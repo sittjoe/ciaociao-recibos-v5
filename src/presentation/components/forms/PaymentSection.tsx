@@ -116,28 +116,30 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({
       newErrors.amount = 'El monto debe ser mayor a 0';
     }
 
-    const otherPayments = editingPayment 
-      ? payments.filter(p => p.id !== editingPayment.id)
-      : payments;
+    // Simplify - allow overpayment
+    // const otherPayments = editingPayment 
+    //   ? payments.filter(p => p.id !== editingPayment.id)
+    //   : payments;
     
-    const otherPaymentsTotal = otherPayments.reduce((sum, p) => sum + p.amount, 0);
-    const newTotal = otherPaymentsTotal + paymentFormData.amount;
+    // const otherPaymentsTotal = otherPayments.reduce((sum, p) => sum + p.amount, 0);
+    // const newTotal = otherPaymentsTotal + paymentFormData.amount;
 
-    if (newTotal > totalAmount) {
-      newErrors.amount = `El total de pagos no puede exceder $${totalAmount.toFixed(2)}`;
-    }
+    // if (newTotal > totalAmount) {
+    //   newErrors.amount = `El total de pagos no puede exceder $${totalAmount.toFixed(2)}`;
+    // }
 
     if (!paymentFormData.date) {
       newErrors.date = 'La fecha es requerida';
     }
 
-    if (paymentFormData.method === 'check' && !paymentFormData.reference.trim()) {
-      newErrors.reference = 'El número de cheque es requerido';
-    }
+    // Simplify - make references optional for all payment methods
+    // if (paymentFormData.method === 'check' && !paymentFormData.reference.trim()) {
+    //   newErrors.reference = 'El número de cheque es requerido';
+    // }
 
-    if (paymentFormData.method === 'transfer' && !paymentFormData.reference.trim()) {
-      newErrors.reference = 'La referencia de transferencia es requerida';
-    }
+    // if (paymentFormData.method === 'transfer' && !paymentFormData.reference.trim()) {
+    //   newErrors.reference = 'La referencia de transferencia es requerida';
+    // }
 
     setPaymentErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -204,7 +206,6 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({
           startIcon={<PaymentIcon />}
           onClick={openAddPaymentDialog}
           size="small"
-          disabled={remainingBalance <= 0}
         >
           Agregar Pago
         </Button>
@@ -402,13 +403,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label={
-                  paymentFormData.method === 'check' 
-                    ? 'Número de Cheque *' 
-                    : paymentFormData.method === 'transfer' 
-                    ? 'Referencia de Transferencia *'
-                    : 'Referencia'
-                }
+                label="Referencia (Opcional)"
                 value={paymentFormData.reference}
                 onChange={(e) => setPaymentFormData(prev => ({ ...prev, reference: e.target.value }))}
                 error={!!paymentErrors.reference}

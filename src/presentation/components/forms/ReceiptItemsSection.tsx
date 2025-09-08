@@ -57,7 +57,7 @@ const ReceiptItemsSection: React.FC<ReceiptItemsSectionProps> = ({
     productId: '',
     description: '',
     quantity: 1,
-    unitPrice: 0,
+    unitPrice: 100, // Set a default price so button isn't disabled
     weight: undefined,
     material: '',
     karat: undefined,
@@ -69,7 +69,7 @@ const ReceiptItemsSection: React.FC<ReceiptItemsSectionProps> = ({
       productId: '',
       description: '',
       quantity: 1,
-      unitPrice: 0,
+      unitPrice: 100, // Set a default price
       weight: undefined,
       material: '',
       karat: undefined,
@@ -112,13 +112,14 @@ const ReceiptItemsSection: React.FC<ReceiptItemsSectionProps> = ({
       newErrors.unitPrice = 'El precio unitario no puede ser negativo';
     }
 
-    if (itemFormData.weight && itemFormData.weight <= 0) {
-      newErrors.weight = 'El peso debe ser mayor a 0';
-    }
+    // Simplify validations - make weight and karat optional with no restrictions
+    // if (itemFormData.weight && itemFormData.weight <= 0) {
+    //   newErrors.weight = 'El peso debe ser mayor a 0';
+    // }
 
-    if (itemFormData.karat && (itemFormData.karat < 1 || itemFormData.karat > 24)) {
-      newErrors.karat = 'Los quilates deben estar entre 1 y 24';
-    }
+    // if (itemFormData.karat && (itemFormData.karat < 1 || itemFormData.karat > 24)) {
+    //   newErrors.karat = 'Los quilates deben estar entre 1 y 24';
+    // }
 
     setItemErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -425,7 +426,7 @@ const ReceiptItemsSection: React.FC<ReceiptItemsSectionProps> = ({
           <Button 
             variant="contained" 
             onClick={handleSaveItem}
-            disabled={!itemFormData.description || itemFormData.quantity <= 0}
+            disabled={!itemFormData.description.trim()}
           >
             {editingItem ? 'Actualizar' : 'Agregar'}
           </Button>

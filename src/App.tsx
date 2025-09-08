@@ -25,7 +25,7 @@ function App(): JSX.Element {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box sx={{ display: 'flex', height: '100vh' }}>
-          <Router>
+          <Router basename="/ciaociao-recibos-v5">
             <MainLayout>
               <Routes>
                 <Route path='/' element={<Navigate to='/dashboard' replace />} />

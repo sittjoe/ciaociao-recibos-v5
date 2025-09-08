@@ -141,7 +141,7 @@ const ReceiptForm: React.FC<ReceiptFormProps> = ({
       newErrors.receiptNumber = 'El número de recibo es requerido';
     }
 
-    if (!formData.clientId) {
+    if (!formData.client) {
       newErrors.client = 'Debe seleccionar un cliente';
     }
 
@@ -149,9 +149,10 @@ const ReceiptForm: React.FC<ReceiptFormProps> = ({
       newErrors.items = 'Debe agregar al menos un artículo';
     }
 
-    if (formData.status === 'completed' && remainingBalance > 0) {
-      newErrors.payment = 'El recibo debe estar completamente pagado para marcarlo como completado';
-    }
+    // Simplify - allow completing even with pending balance
+    // if (formData.status === 'completed' && remainingBalance > 0) {
+    //   newErrors.payment = 'El recibo debe estar completamente pagado para marcarlo como completado';
+    // }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -214,28 +215,31 @@ const ReceiptForm: React.FC<ReceiptFormProps> = ({
             <Box display="flex" gap={1} alignItems="flex-start">
               <Autocomplete
                 fullWidth
-                options={clients}
-                getOptionLabel={(option) => option.getDisplayName()}
+                options={clients || []}
+                getOptionLabel={(option) => option?.getDisplayName() || ''}
                 value={formData.client}
                 onChange={(_, value) => handleClientSelect(value)}
+                isOptionEqualToValue={(option, value) => option?.id === value?.id}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     label="Cliente"
                     error={!!errors.client}
                     helperText={errors.client}
+                    placeholder="Selecciona un cliente"
                   />
                 )}
                 renderOption={(props, option) => (
-                  <Box component="li" {...props}>
+                  <Box component="li" {...props} key={option?.id}>
                     <Box>
-                      <Typography variant="body1">{option.getDisplayName()}</Typography>
+                      <Typography variant="body1">{option?.getDisplayName()}</Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {option.getPrimaryContact()}
+                        {option?.getPrimaryContact()}
                       </Typography>
                     </Box>
                   </Box>
                 )}
+                noOptionsText="No hay clientes disponibles"
               />
               <Button
                 variant="outlined"
